@@ -1,4 +1,4 @@
-drop database saludtotal;
+
 CREATE DATABASE SaludTotal;
 
 USE SaludTotal;
@@ -14,11 +14,11 @@ fechadecaducidad date
 );
 
 insert into medicinas
-values (1, 'Panadol','COM',1.52, 12,'2026-01-01');
+values (1, 'Acetaminofen','COM',0.50, 12,'2026-01-01');
 insert into medicinas
-values (2, 'Aspirina','COM',2.73, 43,'2028-01-01');
+values (2, 'Paracetamol','COM',0.34, 43,'2028-01-01');
 insert into medicinas
-values (3, 'Losec','COM',1.52, 12,'2026-01-01');
+values (3, 'Ibuprofeno','COM',0.75, 12,'2026-01-01');
 insert into medicinas
 values (4, 'Zocor','COM',1.52, 12,'2026-01-01');
 insert into medicinas
@@ -27,10 +27,7 @@ insert into medicinas
 values (6, 'Glucophage','COM',1.52, 12,'2026-01-01');
 insert into medicinas
 values (7, 'Cozaar','COM',1.52, 12,'2026-01-01');
-insert into medicinas
-values (8, 'Eutirox','COM',1.52, 12,'2026-01-01');
-insert into medicinas
-values (9, 'Ventolin','COM',1.52, 12,'2026-01-01');
+
 -- Medicamentos genéricos
 insert into medicinas
 values (10, 'Paracetamol','GEN',0.53, 23,'2027-01-01');
@@ -44,12 +41,6 @@ insert into medicinas
 values (14, 'Amlodipino','GEN',1.00, 50,'2028-01-01');
 insert into medicinas
 values (15, 'Metformina','GEN',1.00, 50,'2028-01-01');
-insert into medicinas
-values (16, 'Losartán','GEN',1.00, 50,'2028-01-01');
-insert into medicinas
-values (17, 'Levotiroxina','GEN',1.00, 50,'2028-01-01');
-insert into medicinas
-values (18, 'Salbutamol','GEN',1.00, 50,'2028-01-01');
 
 
 SELECT * from medicinas;
@@ -249,6 +240,7 @@ SELECT * from facturadetalle;
 SELECT * from medicinas;
 
 -- validamos de que no se ingrese un número de factura que no existe
+-- que la tabla 
 alter table facturadetalle
 add constraint facturanumero_fk
 Foreign Key (facturanumero) 
@@ -269,3 +261,10 @@ add constraint facturadetalle_precio_ck
 check(precio > 0);
 
 -- confirmar que nuestro archivo funcione
+
+use saludtotal;
+select * from medicinafrecuente;
+
+-- SEMANA 2
+-- FECHA: 15-12-2025
+-- Crear las tablas definidas en el excel y subur
