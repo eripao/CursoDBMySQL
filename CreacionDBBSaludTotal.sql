@@ -268,3 +268,55 @@ select * from medicinafrecuente;
 -- SEMANA 2
 -- FECHA: 15-12-2025
 -- Crear las tablas definidas en el excel y subur
+
+show tables;
+
+--creación tabla proveedor
+create table proveedor(
+    ruc_proveedor CHAR(13),
+    nombre_proveedor VARCHAR(100),
+    contacto_proveedor VARCHAR(14),
+    email_proveedor VARCHAR(25)
+);
+
+insert into proveedor values ('17000000001','Bayer Ecuador','Luis Mayorga','mayorga@bayer.com');
+insert into proveedor values ('17000000002','HealthCom','Andrés Zotos','soto@health.com');
+
+select * from proveedor;
+
+-- creación tabla proveedor_medicinas
+
+create table proveedor_medicinas(
+    ruc_proveedor CHAR(13),
+    medicina_id int,
+    precio_proveedor DECIMAL(15,2),
+    Lote int,
+    Plazo int
+);
+desc medicinas;
+
+SELECT * from proveedor_medicinas;
+
+alter table proveedor_medicinas
+add PRIMARY key (ruc_proveedor, medicina_id);
+
+
+alter table proveedor_medicinas
+add constraint proveedor_medicinas_precio_ck
+check(precio_proveedor > 0);
+
+alter table proveedor_medicinas
+add constraint proveedor_medicinas_lote_ck
+check(lote > 0);
+
+alter table proveedor_medicinas
+add constraint proveedor_medicinas_plazo_ck
+check(plazo > 0);
+
+insert into proveedor_medicinas values('17000000001',1,0.25,100,15);
+insert into proveedor_medicinas values('17000000001',2,0.12,200,30);
+insert into proveedor_medicinas values('17000000001',3,0.32,300,7);
+insert into proveedor_medicinas values('17000000002',2,0.10,800,7);
+insert into proveedor_medicinas values('17000000002',3,0.30,250,7);
+
+SELECT * from proveedor_medicinas;
