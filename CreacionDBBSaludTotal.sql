@@ -1,4 +1,6 @@
 
+
+drop database saludtotal;
 CREATE DATABASE SaludTotal;
 
 USE SaludTotal;
@@ -43,8 +45,6 @@ insert into medicinas
 values (15, 'Metformina','GEN',1.00, 50,'2028-01-01');
 
 
-SELECT * from medicinas;
-
 use saludtotal;
 create table cliente 
 (
@@ -87,7 +87,6 @@ create table medicinafrecuente
  descuento DECIMAL(5,2)  -- 123,45
 );
 
-select * from medicinafrecuente;
 alter table medicinafrecuente
 add constraint clientecedulafx
 Foreign Key (cliente_cedula) 
@@ -103,10 +102,7 @@ add primary key (cliente_cedula, medicina_id);
 -- colocar correctamente los datos en entre cliente y medicamento
 
 use saludtotal;
-SELECT * from cliente;
-SELECT * from medicinas;
 
-select * from medicinafrecuente;
 insert into medicinafrecuente
 values ('0300885506',1,'Panadol','MEN', 1.52);
 
@@ -142,7 +138,7 @@ values ('1720477171',12,'Omeprazol','SEM', 2.00);
 use saludtotal;
 -- creación de tabla datos de la empresa
 create table empresa(
-    RUC CHAR(13),
+    RUC CHAR(13) PRIMARY key,
     razonsocial VARCHAR(100),
     direccion_empresa VARCHAR(100),
     telefono_empresa VARCHAR(14),
@@ -155,9 +151,6 @@ insert into empresa values ('17265458001','Salud Total S.A', 'Av. 10 de Agosto S
 -- añadimos campos a la tabla clientes
 alter table cliente
 add column email VARCHAR (20);
-
-desc cliente;
-SELECT * from cliente;
 
 -- actualizamos los datos del cliente
 UPDATE cliente
@@ -227,6 +220,7 @@ use saludtotal;
 alter table facturadetalle
 add PRIMARY key (facturanumero, medicamento_id);
 
+
 insert into facturadetalle values ('0000000001',3,12,2.73);
 -- se repite el número de factura pero agregamos más medicamentos
 insert into facturadetalle values ('0000000001',1,5,1.52);
@@ -235,9 +229,7 @@ insert into facturadetalle values ('0000000002',1,4,1.52);
 insert into facturadetalle values ('0000000002',4,3,1.74);
 insert into facturadetalle values ('0000000003',3,4,1.52);
 insert into facturadetalle values ('0000000003',5,3,1.74);
-SELECT * FROM factura;
-SELECT * from facturadetalle;
-SELECT * from medicinas;
+
 
 -- validamos de que no se ingrese un número de factura que no existe
 -- que la tabla 
@@ -247,9 +239,6 @@ Foreign Key (facturanumero)
 REFERENCES factura (facturanumero);
 
 
-SELECT * from medicinas;
-
-select * from facturadetalle;
 -- validación para no ingresa números negativos
 alter table facturadetalle
 add constraint facturadetalle_cantidad_ck
@@ -262,16 +251,13 @@ check(precio > 0);
 
 -- confirmar que nuestro archivo funcione
 
-use saludtotal;
-select * from medicinafrecuente;
 
 -- SEMANA 2
 -- FECHA: 15-12-2025
 -- Crear las tablas definidas en el excel y subur
 
-show tables;
 
---creación tabla proveedor
+-- creación tabla proveedor
 create table proveedor(
     ruc_proveedor CHAR(13),
     nombre_proveedor VARCHAR(100),
@@ -282,7 +268,6 @@ create table proveedor(
 insert into proveedor values ('17000000001','Bayer Ecuador','Luis Mayorga','mayorga@bayer.com');
 insert into proveedor values ('17000000002','HealthCom','Andrés Zotos','soto@health.com');
 
-select * from proveedor;
 
 -- creación tabla proveedor_medicinas
 
@@ -293,12 +278,8 @@ create table proveedor_medicinas(
     Lote int,
     Plazo int
 );
-desc medicinas;
 
-SELECT * from proveedor_medicinas;
-
-alter table proveedor_medicinas
-add PRIMARY key (ruc_proveedor, medicina_id);
+alter table proveedor_medicinas add PRIMARY key (ruc_proveedor, medicina_id);
 
 
 alter table proveedor_medicinas
@@ -319,4 +300,3 @@ insert into proveedor_medicinas values('17000000001',3,0.32,300,7);
 insert into proveedor_medicinas values('17000000002',2,0.10,800,7);
 insert into proveedor_medicinas values('17000000002',3,0.30,250,7);
 
-SELECT * from proveedor_medicinas;
