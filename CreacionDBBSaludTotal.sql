@@ -1,5 +1,5 @@
-
-CREATE DATABASE SaludTotal;
+drop DATABASE saludtotal;
+CREATE DATABASE saludtotal;
 
 USE SaludTotal;
 
@@ -13,124 +13,58 @@ stock int, -- siempre tenemos cantidades enteras
 fechadecaducidad date
 );
 
--- 
-use saludtotal;
--- validaciones para que el nombre del medicamento sea único
-alter table medicinas
-add constraint medicinas_nombre_uq
-unique (nombre);
-
--- realizamos pruebas de la validación indicando que el nombre paracetamol ya esta ingresado
--- insert into medicinas values (200,'Paracetamol','GEN', 1.50,12,'2026-01-01');
--- vamos a definir que el valor GEN sera el valor por defecto
-
--- poner aquí el comando modify
-alter table medicinas
-modify column tipo char (3) default 'GEN';
-
-
--- otra manera como insertar datos
-insert into medicinas (id, nombre, precio, stock, fechadecaducidad) values (15,'Terminafina',3.43,12,'2028-01-01');
-
--- debemos modicar el diseño de la tabla para evitar que se ingresen nombre con valores null, null es ausencia de datos, no es un dato
-alter table medicinas
-modify COLUMN nombre VARCHAR(100) not null;
-
--- control para validar como estan escritos los valores de los atributos
-alter table medicinas
-add constraint medicinas_tipo_val
-check ( -- valores que estan permitidos y verifique que los valores sean los de este conjunto
-    tipo in ('GEN','COM')
-);
-
-insert into medicinas (id, nombre, tipo, precio, stock, fechadecaducidad)
-values (17, 'Acetamenofen PLU','GEN',0.50, 12,'2026-01-01');
-
-select * from medicinas;
-
--- 
-insert into medicinas (id, nombre, tipo, precio, stock, fechadecaducidad)
-values (16, null,'COM',0.50, 12,'2026-01-01');
-
-SELECT * from medicinas;
 -- tabla de medicinas tiene un tipo puede tomar 3 valores 
+insert into medicinas
+values (1, 'Acetaminofen', 'COM', 5.50, 100, '2026-08-31');
+insert into medicinas values
+(2, 'Paracetamol', 'GEN', 1.80, 300, '2026-10-15');
+insert into medicinas
+values (3, 'Ibuprofeno', 'COM', 18.90, 60, '2025-12-20');
+insert into medicinas
+values (4, 'Amoxicilina + Ácido Clavulánico', 'GEN', 9.50, 120, '2026-01-30');
+insert into medicinas
+values (5, 'Advil', 'COM', 6.40, 90, '2026-05-18');
+insert into medicinas
+values (6, 'Ibuprofeno', 'GEN', 2.10, 250, '2026-07-25');
+insert into medicinas
+values (7, 'Voltaren', 'COM', 7.80, 70, '2025-11-10');
 
 insert into medicinas
-values (1, 'Acetaminofen','COM',0.50, 12,'2026-01-01');
+values (8, 'Diclofenaco', 'GEN', 2.50, 200, '2026-02-28');
 insert into medicinas
-values (2, 'Paracetamol','COM',0.34, 43,'2028-01-01');
+values (9, 'Bayer Aspirina', 'COM', 4.20, 85, '2026-04-05');
 insert into medicinas
-values (3, 'Ibuprofeno','COM',0.75, 12,'2026-01-01');
-insert into medicinas
-values (4, 'Zocor','COM',1.52, 12,'2026-01-01');
-insert into medicinas
-values (5, 'Norvasc','COM',1.52, 12,'2026-01-01');
-insert into medicinas
-values (6, 'Glucophage','COM',1.52, 12,'2026-01-01');
-insert into medicinas
-values (7, 'Cozaar','COM',1.52, 12,'2026-01-01');
+values (10, 'Ácido Acetilsalicílico', 'GEN', 1.60, 220, '2026-06-30');
 
--- Medicamentos genéricos
-insert into medicinas
-values (10, 'Paracetamol','GEN',0.53, 23,'2027-01-01');
-insert into medicinas
-values (11, 'Ácido acetilsalicílico','GEN',1.74, 50,'2030-01-01');
-insert into medicinas
-values (12, 'Omeprazol','GEN',2.00, 43,'2028-01-01');
-insert into medicinas
-values (13, 'Simvastatina','GEN',1.00, 50,'2028-01-01');
-insert into medicinas
-values (14, 'Amlodipino','GEN',1.00, 50,'2028-01-01');
-insert into medicinas
-values (15, 'Metformina','GEN',1.00, 50,'2028-01-01');
-
-
-use saludtotal;
-create table cliente 
+create table clientes 
 (
 cedula CHAR (10) primary key, -- declaramos el identificador foraneo 
 nombre VARCHAR(100),
-fechadenacimiento datetime,
-tipodecliente CHAR(3)
+fechadenacimiento date,
+tipo CHAR(3)
 );
 
--- atributo email único en la tabla clientes
-alter table cliente
-add constraint cliente_email_uq
-unique (email);
+insert into clientes
+values ('0602596587', 'Viviana Perez', '1990-03-24', 'NT');
 
+insert into clientes
+values ('1804141479', 'Juan Guaman', '1990-03-24', 'JUR');
+insert into clientes
+values ('1720477171', 'Betty Bowen', '1990-03-24', 'NT');
+insert into clientes
+values ('1802278604', 'Manuel Avalos', '1990-03-24', 'INS');
 
---  hacemos esto para la tabla cliente
-alter table cliente
-modify column tipodecliente char (3) default 'NAT';
+insert into clientes
+values ('1723006035', 'Soledad Perez', '1990-03-24', 'INS');
 
--- insertamos datos
-insert into cliente (cedula, nombre, fechadenacimiento) values ('182929004', 'Jose Perez','1990-07-23');
+insert into clientes
+values ('1720026663', 'Patricio Villacis', '1990-03-24', 'INS');
 
-insert into cliente
-values ('0602596587', 'Viviana Perez', '1990-03-24 00:00:00', 'NT');
+insert into clientes
+values ('1758357162', 'Diego Jimenez', '1990-03-24', 'INS');
 
-insert into cliente
-values ('1804141479', 'Juan Guaman', '1990-03-24 00:00:00', 'JUR');
-insert into cliente
-values ('1720477171', 'Betty Bowen', '1990-03-24 00:00:00', 'NT');
-insert into cliente
-values ('1802278604', 'Manuel Avalos', '1990-03-24 00:00:00', 'INS');
-
-insert into cliente
-values ('1723006035', 'Soledad Perez', '1990-03-24 00:00:00', 'INS');
-
-insert into cliente
-values ('1720026663', 'Patricio Villacis', '1990-03-24 00:00:00', 'INS');
-
-insert into cliente
-values ('1758357162', 'Diego Jimenez', '1990-03-24 00:00:00', 'INS');
-
-insert into cliente
-values ('0300885506', 'Fabian Romero', '1990-03-24 00:00:00', 'INS');
-
--- agregamos un cliente con un mismo correo
-insert into cliente values ('1726439415','Danilo','NAT','2000-01-01','viviana5@gmail.com','0997624392', 'Av. 6 diciembre');
+insert into clientes
+values ('0300885506', 'Fabian Romero', '1990-03-24', 'INS');
 
 use saludtotal;
 create table medicinafrecuente
@@ -145,7 +79,7 @@ create table medicinafrecuente
 alter table medicinafrecuente
 add constraint clientecedulafx
 Foreign Key (cliente_cedula) 
-REFERENCES cliente (cedula);
+REFERENCES clientes (cedula);
 
 alter table medicinafrecuente
 add constraint medicionaid_fk
@@ -159,16 +93,14 @@ add primary key (cliente_cedula, medicina_id);
 use saludtotal;
 
 insert into medicinafrecuente
-values ('0300885506',1,'Panadol','MEN', 1.52);
+values ('0300885506',1,'Acetaminofen','MEN', 1.52);
 
 insert into medicinafrecuente
-values ('0602596587',2,'Aspirina','MEN', 2.73);
+values ('0602596587',2,'Paracetamol','MEN', 2.73);
 
 insert into medicinafrecuente
-values ('1720026663',3,'Paracetamol','CRI', 0.53);
+values ('1720026663',3,'Ibuprofeno','CRI', 0.53);
 
-insert into medicinafrecuente
-values ('1720477171',12,'Omeprazol','SEM', 2.00);
 
 -- ANÁLISIS
 
@@ -189,11 +121,10 @@ values ('1720477171',12,'Omeprazol','SEM', 2.00);
 -- factura 
 -- Consulta (id_factura, nombreempresa, ruc_empresa, cedula_cliente, nombre_cliente,  fechaemision, cantidad, nombre_medicamento, tipo_medicamento, precio, subtotal, total_factura)
 -- factura_detalle
--- 
-use saludtotal;
+
 -- creación de tabla datos de la empresa
 create table empresa(
-    RUC CHAR(13) PRIMARY key,
+    ruc CHAR(13) PRIMARY key,
     razonsocial VARCHAR(100),
     direccion_empresa VARCHAR(100),
     telefono_empresa VARCHAR(14),
@@ -204,39 +135,39 @@ use saludtotal;
 insert into empresa values ('17265458001','Salud Total S.A', 'Av. 10 de Agosto S/N','0997624384','saludtotal@gmail.com');
 
 -- añadimos campos a la tabla clientes
-alter table cliente
+alter table clientes
 add column email VARCHAR (20);
 
 -- actualizamos los datos del cliente
-UPDATE cliente
+UPDATE clientes
 set email = "fabian1@gmail.com"
 where cedula = '0300885506';
 
-UPDATE cliente
+UPDATE clientes
 set email = "viviana5@gmail.com"
 where cedula = '0602596587';
 
-UPDATE cliente
+UPDATE clientes
 set email = "patricio3@gmail.com"
 where cedula = '1720026663';
 
-UPDATE cliente
+UPDATE clientes
 set email = "betty8@gmail.com"
 where  cedula = '1720477171';
 
-UPDATE cliente
+UPDATE clientes
 set email = "soledad6@gmail.com"
 where cedula = '1723006035';
 
-UPDATE cliente
+UPDATE clientes
 set email = "diego4@gmail.com"
 where cedula = '1758357162';
 
-UPDATE cliente
+UPDATE clientes
 set email = "manuel9@gmail.com"
 where cedula = '1802278604';
 
-UPDATE cliente
+UPDATE clientes
 set email = "juan34@gmail.com"
 where cedula = '1804141479';
 
@@ -258,7 +189,7 @@ insert into factura values ('0000000003','2025-12-12','1720026663',9.00);
 alter table factura
 add constraint facturacedulafx
 Foreign Key (cedula) -- nombre de la columna que estoy aplicando 
-REFERENCES cliente (cedula); -- a que tabla estamos apuntando
+REFERENCES clientes (cedula); -- a que tabla estamos apuntando
 
 -- creamos la tabla detalle_factura
 
@@ -314,10 +245,10 @@ check(precio > 0);
 
 -- creación tabla proveedor
 create table proveedor(
-    ruc_proveedor CHAR(13),
-    nombre_proveedor VARCHAR(100),
-    contacto_proveedor VARCHAR(14),
-    email_proveedor VARCHAR(25)
+    ruc CHAR(13) PRIMARY KEY,
+    nombre VARCHAR(100),
+    contacto VARCHAR(14),
+    email VARCHAR(100)
 );
 
 insert into proveedor values ('17000000001','Bayer Ecuador','Luis Mayorga','mayorga@bayer.com');
@@ -327,19 +258,32 @@ insert into proveedor values ('17000000002','HealthCom','Andrés Zotos','soto@he
 -- creación tabla proveedor_medicinas
 
 create table proveedor_medicinas(
-    ruc_proveedor CHAR(13),
+    proveedor_ruc CHAR(13),
     medicina_id int,
-    precio_proveedor DECIMAL(15,2),
-    Lote int,
-    Plazo int
+    proveedor_precio DECIMAL(10,2),
+    lote int,
+    plazo int
 );
 
-alter table proveedor_medicinas add PRIMARY key (ruc_proveedor, medicina_id);
+-- creamos la primary key y la id compuesta
+use saludtotal;
+ALTER TABLE proveedor_medicinas
+ADD CONSTRAINT fk_proveedor
+FOREIGN KEY (proveedor_ruc)
+REFERENCES proveedor (ruc);
 
+ALTER TABLE proveedor_medicinas
+ADD CONSTRAINT fk_medicina
+FOREIGN KEY (medicina_id)
+REFERENCES medicinas (id);
+
+ALTER TABLE proveedor_medicinas
+ADD CONSTRAINT pk_proveedor_medicinas
+PRIMARY KEY (proveedor_ruc, medicina_id);
 
 alter table proveedor_medicinas
 add constraint proveedor_medicinas_precio_ck
-check(precio_proveedor > 0);
+check(proveedor_precio > 0);
 
 alter table proveedor_medicinas
 add constraint proveedor_medicinas_lote_ck
@@ -355,3 +299,4 @@ insert into proveedor_medicinas values('17000000001',3,0.32,300,7);
 insert into proveedor_medicinas values('17000000002',2,0.10,800,7);
 insert into proveedor_medicinas values('17000000002',3,0.30,250,7);
 
+-- FECHA: 16-12-2025
