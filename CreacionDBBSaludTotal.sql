@@ -1,6 +1,4 @@
 
-
-drop database saludtotal;
 CREATE DATABASE SaludTotal;
 
 USE SaludTotal;
@@ -9,11 +7,53 @@ create table medicinas
 (
 id int primary key, -- declaramos el identificador foraneo 
 nombre VARCHAR(100),
-tipo CHAR(3), -- valores que puede tener (GEN - generico // COM - comercial)
+tipo CHAR(3) default 'GEN', -- valores que puede tener (GEN - generico // COM - comercial)
 precio DECIMAL(15,2), -- indicamos los digtos enteros y decimales
 stock int, -- siempre tenemos cantidades enteras
 fechadecaducidad date
 );
+
+-- 
+use saludtotal;
+-- validaciones para que el nombre del medicamento sea único
+alter table medicinas
+add constraint medicinas_nombre_uq
+unique (nombre);
+
+-- realizamos pruebas de la validación indicando que el nombre paracetamol ya esta ingresado
+-- insert into medicinas values (200,'Paracetamol','GEN', 1.50,12,'2026-01-01');
+-- vamos a definir que el valor GEN sera el valor por defecto
+
+-- poner aquí el comando modify
+alter table medicinas
+modify column tipo char (3) default 'GEN';
+
+
+-- otra manera como insertar datos
+insert into medicinas (id, nombre, precio, stock, fechadecaducidad) values (15,'Terminafina',3.43,12,'2028-01-01');
+
+-- debemos modicar el diseño de la tabla para evitar que se ingresen nombre con valores null, null es ausencia de datos, no es un dato
+alter table medicinas
+modify COLUMN nombre VARCHAR(100) not null;
+
+-- control para validar como estan escritos los valores de los atributos
+alter table medicinas
+add constraint medicinas_tipo_val
+check ( -- valores que estan permitidos y verifique que los valores sean los de este conjunto
+    tipo in ('GEN','COM')
+);
+
+insert into medicinas (id, nombre, tipo, precio, stock, fechadecaducidad)
+values (17, 'Acetamenofen PLU','GEN',0.50, 12,'2026-01-01');
+
+select * from medicinas;
+
+-- 
+insert into medicinas (id, nombre, tipo, precio, stock, fechadecaducidad)
+values (16, null,'COM',0.50, 12,'2026-01-01');
+
+SELECT * from medicinas;
+-- tabla de medicinas tiene un tipo puede tomar 3 valores 
 
 insert into medicinas
 values (1, 'Acetaminofen','COM',0.50, 12,'2026-01-01');
@@ -54,6 +94,19 @@ fechadenacimiento datetime,
 tipodecliente CHAR(3)
 );
 
+-- atributo email único en la tabla clientes
+alter table cliente
+add constraint cliente_email_uq
+unique (email);
+
+
+--  hacemos esto para la tabla cliente
+alter table cliente
+modify column tipodecliente char (3) default 'NAT';
+
+-- insertamos datos
+insert into cliente (cedula, nombre, fechadenacimiento) values ('182929004', 'Jose Perez','1990-07-23');
+
 insert into cliente
 values ('0602596587', 'Viviana Perez', '1990-03-24 00:00:00', 'NT');
 
@@ -76,6 +129,8 @@ values ('1758357162', 'Diego Jimenez', '1990-03-24 00:00:00', 'INS');
 insert into cliente
 values ('0300885506', 'Fabian Romero', '1990-03-24 00:00:00', 'INS');
 
+-- agregamos un cliente con un mismo correo
+insert into cliente values ('1726439415','Danilo','NAT','2000-01-01','viviana5@gmail.com','0997624392', 'Av. 6 diciembre');
 
 use saludtotal;
 create table medicinafrecuente
