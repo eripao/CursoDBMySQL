@@ -16,10 +16,10 @@ fechadecaducidad date
 -- tabla de medicinas tiene un tipo puede tomar 3 valores 
 insert into medicinas
 values (1, 'Acetaminofen', 'COM', 5.50, 100, '2026-08-31');
-insert into medicinas values
-(2, 'Paracetamol', 'GEN', 1.80, 300, '2026-10-15');
+insert into medicinas 
+values (2, 'Paracetamol', 'GEN', 1.80, 300, '2026-10-15');
 insert into medicinas
-values (3, 'Ibuprofeno', 'COM', 18.90, 60, '2025-12-20');
+values (3, 'Tylenol', 'COM', 18.90, 60, '2025-12-20');
 insert into medicinas
 values (4, 'Amoxicilina + Ácido Clavulánico', 'GEN', 9.50, 120, '2026-01-30');
 insert into medicinas
@@ -299,4 +299,66 @@ insert into proveedor_medicinas values('17000000001',3,0.32,300,7);
 insert into proveedor_medicinas values('17000000002',2,0.10,800,7);
 insert into proveedor_medicinas values('17000000002',3,0.30,250,7);
 
+
 -- FECHA: 16-12-2025
+-- CAMBIOS REALIZADOS EN LA TABLA MEDICINAS
+
+-- validaciones para que el nombre del medicamento sea único
+
+alter table medicinas
+add constraint medicinas_nombre_uq
+unique (nombre);
+
+-- realizamos pruebas de la validación indicando que el nombre paracetamol ya esta ingresado
+-- insert into medicinas values (200,'Paracetamol','GEN', 1.50,12,'2026-01-01');
+-- vamos a definir que el valor GEN sera el valor por defecto
+
+-- poner aquí el comando modify
+alter table medicinas
+modify column tipo char (3) default 'GEN';
+
+-- otra manera como insertar datos
+insert into medicinas (id, nombre, precio, stock, fechadecaducidad) values (15,'Terminafina',3.43,12,'2028-01-01');
+
+-- debemos modicar el diseño de la tabla para evitar que se ingresen nombre con valores null, null es ausencia de datos, no es un dato
+alter table medicinas
+modify COLUMN nombre VARCHAR(100) not null;
+
+-- control para validar como estan escritos los valores de los atributos
+alter table medicinas
+add constraint medicinas_tipo_val
+check ( -- valores que estan permitidos y verifique que los valores sean los de este conjunto
+    tipo in ('GEN','COM')
+);
+
+insert into medicinas (id, nombre, tipo, precio, stock, fechadecaducidad)
+values (17, 'Acetamenofen PLU','GEN',0.50, 12,'2026-01-01');
+
+select * from medicinas;
+
+-- validación que no se puede ingresar nombres con valor null
+insert into medicinas (id, nombre, tipo, precio, stock, fechadecaducidad)
+values (16, null,'COM',0.50, 12,'2026-01-01');
+
+-- CAMBIOS REALIZADOS EN LA TABLA CLIENTES
+
+-- atributo email único en la tabla clientes
+alter table clientes
+add constraint cliente_email_uq
+unique (email);
+
+
+-- agregamos un cliente con un mismo correo y validamos que da un error al momento de ingresarlo
+insert into clientes values ('1726439415','Danilo Rodriguez','2000-01-01','NAT','viviana5@gmail.com');
+
+--  hacemos esto para la tabla cliente
+alter table clientes
+modify column email VARCHAR (100) not null;
+-- validamos que no se pueda ingresar un email con valor null
+alter table medicinas
+modify COLUMN nombre VARCHAR(100) not null;
+
+-- insertamos datos
+insert into clientes (cedula, nombre, fechadenacimiento) values ('182929004', 'Jose Perez','1990-07-23',null);
+
+SELECT * from clientes;
