@@ -13,6 +13,7 @@ stock int, -- siempre tenemos cantidades enteras
 fechadecaducidad date
 );
 
+select * from medicinas;
 -- tabla de medicinas tiene un tipo puede tomar 3 valores 
 insert into medicinas
 values (1, 'Acetaminofen', 'COM', 5.50, 100, '2026-08-31');
@@ -41,30 +42,33 @@ create table clientes
 cedula CHAR (10) primary key, -- declaramos el identificador foraneo 
 nombre VARCHAR(100),
 fechadenacimiento date,
-tipo CHAR(3)
+tipo CHAR(3),
+email VARCHAR(100),
+direccion VARCHAR(100),
+telefono VARCHAR(13)
 );
 
 insert into clientes
-values ('0602596587', 'Viviana Perez', '1990-03-24', 'NT');
+values ('0602596587', 'Viviana Perez', '1990-03-24', 'NT','viviana5@gmail.com','Av. Gaspar de Villarroel N79-813, Carcelén, Quito', '0910647731');
 
 insert into clientes
-values ('1804141479', 'Juan Guaman', '1990-03-24', 'JUR');
+values ('1804141479', 'Juan Guaman', '1990-03-24', 'JUR','juan34@gmail.com','Av. De los Shyris N92-345, Carcelén, Quito', '0973666927');
 insert into clientes
-values ('1720477171', 'Betty Bowen', '1990-03-24', 'NT');
+values ('1720477171', 'Betty Bowen', '1990-03-24', 'NT','betty8@gmail.com','Av. Colón N39-452, Turubamba, Quito', '0976632750');
 insert into clientes
-values ('1802278604', 'Manuel Avalos', '1990-03-24', 'INS');
+values ('1802278604', 'Manuel Avalos', '1990-03-24', 'INS','manuel9@gmail.com','Av. República N18-902, Calderón, Quito', '0934473990');
 
 insert into clientes
-values ('1723006035', 'Soledad Perez', '1990-03-24', 'INS');
+values ('1723006035', 'Soledad Perez', '1990-03-24', 'INS','soledad6@gmail.com','Av. Gaspar de Villarroel N39-698, Iñaquito, Quito', '0909111159');
 
 insert into clientes
-values ('1720026663', 'Patricio Villacis', '1990-03-24', 'INS');
+values ('1720026663', 'Patricio Villacis', '1990-03-24', 'INS','patricio3@gmail.,com','Calle Whymper N88-718, La Floresta, Quito','0934567990');
 
 insert into clientes
-values ('1758357162', 'Diego Jimenez', '1990-03-24', 'INS');
+values ('1758357162', 'Diego Jimenez', '1990-03-24', 'INS','diego4@gmail.com','Av. Mariana de Jesús N92-284, Quitumbe, Quito', '0978884020');
 
 insert into clientes
-values ('0300885506', 'Fabian Romero', '1990-03-24', 'INS');
+values ('0300885506', 'Fabian Romero', '1990-03-24', 'INS','fabian1@gmail.com','Calle Whymper N31-522, La Mariscal, Quito', '0961655576');
 
 use saludtotal;
 create table medicinafrecuente
@@ -362,3 +366,6 @@ modify COLUMN nombre VARCHAR(100) not null;
 insert into clientes (cedula, nombre, fechadenacimiento) values ('182929004', 'Jose Perez','1990-07-23',null);
 
 SELECT * from clientes;
+
+-- FECHA: 17-12-2025
+-- FUNDAMENTOS ED  CONSULTAS EN SQL
