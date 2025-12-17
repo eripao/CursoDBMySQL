@@ -1,0 +1,44 @@
+-- Archivo: medicinas_insert.sql
+-- 40 registros para tabla medicinas (MySQL)
+-- ID desde 11 hasta 50 (inclusive)
+use saludtotal;
+INSERT INTO medicinas (id, nombre, tipo, precio, stock, fechadecaducidad) VALUES (11, 'Paracetamol (Acetaminofén) 500 mg', 'GEN', 2.50, 180, '2027-06-30');
+INSERT INTO medicinas (id, nombre, tipo, precio, stock, fechadecaducidad) VALUES (12, 'Ibuprofeno 400 mg', 'GEN', 3.10, 150, '2027-09-15');
+INSERT INTO medicinas (id, nombre, tipo, precio, stock, fechadecaducidad) VALUES (13, 'Amoxicilina 500 mg', 'GEN', 5.80, 120, '2028-02-28');
+INSERT INTO medicinas (id, nombre, tipo, precio, stock, fechadecaducidad) VALUES (14, 'Omeprazol 20 mg', 'GEN', 4.20, 140, '2028-11-30');
+INSERT INTO medicinas (id, nombre, tipo, precio, stock, fechadecaducidad) VALUES (15, 'Diclofenaco sódico 50 mg', 'GEN', 2.90, 160, '2027-12-31');
+INSERT INTO medicinas (id, nombre, tipo, precio, stock, fechadecaducidad) VALUES (16, 'Naproxeno 500 mg', 'GEN', 3.40, 130, '2028-05-31');
+INSERT INTO medicinas (id, nombre, tipo, precio, stock, fechadecaducidad) VALUES (17, 'Azitromicina 500 mg', 'GEN', 7.50, 90, '2028-01-31');
+INSERT INTO medicinas (id, nombre, tipo, precio, stock, fechadecaducidad) VALUES (18, 'Cefalexina 500 mg', 'GEN', 6.20, 80, '2028-08-31');
+INSERT INTO medicinas (id, nombre, tipo, precio, stock, fechadecaducidad) VALUES (19, 'Ketorolaco 10 mg', 'GEN', 3.80, 110, '2027-07-31');
+INSERT INTO medicinas (id, nombre, tipo, precio, stock, fechadecaducidad) VALUES (20, 'Ácido acetilsalicílico (Aspirina) 100 mg', 'GEN', 2.20, 200, '2027-10-31');
+INSERT INTO medicinas (id, nombre, tipo, precio, stock, fechadecaducidad) VALUES (21, 'Metformina 850 mg', 'GEN', 4.00, 170, '2028-03-31');
+INSERT INTO medicinas (id, nombre, tipo, precio, stock, fechadecaducidad) VALUES (22, 'Losartán potásico 50 mg', 'GEN', 5.00, 150, '2028-09-30');
+INSERT INTO medicinas (id, nombre, tipo, precio, stock, fechadecaducidad) VALUES (23, 'Atorvastatina 20 mg', 'GEN', 8.50, 90, '2029-01-31');
+INSERT INTO medicinas (id, nombre, tipo, precio, stock, fechadecaducidad) VALUES (24, 'Simvastatina 20 mg', 'GEN', 7.90, 85, '2028-12-31');
+INSERT INTO medicinas (id, nombre, tipo, precio, stock, fechadecaducidad) VALUES (25, 'Amlodipina 5 mg', 'GEN', 3.70, 160, '2028-06-30');
+INSERT INTO medicinas (id, nombre, tipo, precio, stock, fechadecaducidad) VALUES (26, 'Enalapril 10 mg', 'GEN', 3.60, 150, '2028-04-30');
+INSERT INTO medicinas (id, nombre, tipo, precio, stock, fechadecaducidad) VALUES (27, 'Furosemida 40 mg', 'GEN', 2.80, 140, '2027-08-31');
+INSERT INTO medicinas (id, nombre, tipo, precio, stock, fechadecaducidad) VALUES (28, 'Loratadina 10 mg', 'GEN', 2.90, 180, '2028-05-31');
+INSERT INTO medicinas (id, nombre, tipo, precio, stock, fechadecaducidad) VALUES (29, 'Cetirizina 10 mg', 'GEN', 3.20, 170, '2028-07-31');
+INSERT INTO medicinas (id, nombre, tipo, precio, stock, fechadecaducidad) VALUES (30, 'Salbutamol inhalador 100 mcg/dosis', 'GEN', 9.90, 70, '2028-10-31');
+INSERT INTO medicinas (id, nombre, tipo, precio, stock, fechadecaducidad) VALUES (31, 'Ibuprofeno (Advil) 200 mg', 'COM', 5.50, 120, '2027-11-30');
+INSERT INTO medicinas (id, nombre, tipo, precio, stock, fechadecaducidad) VALUES (32, 'Paracetamol (Tylenol) 500 mg', 'COM', 4.90, 140, '2027-09-30');
+INSERT INTO medicinas (id, nombre, tipo, precio, stock, fechadecaducidad) VALUES (33, 'Omeprazol (Losec) 20 mg', 'COM', 9.80, 75, '2028-02-29');
+INSERT INTO medicinas (id, nombre, tipo, precio, stock, fechadecaducidad) VALUES (34, 'Amoxicilina (Amoxil) 500 mg', 'COM', 11.20, 60, '2028-03-31');
+INSERT INTO medicinas (id, nombre, tipo, precio, stock, fechadecaducidad) VALUES (35, 'Diclofenaco (Voltaren) 50 mg', 'COM', 6.50, 100, '2027-12-31');
+INSERT INTO medicinas (id, nombre, tipo, precio, stock, fechadecaducidad) VALUES (36, 'Naproxeno (Aleve) 220 mg', 'COM', 6.90, 100, '2028-06-30');
+INSERT INTO medicinas (id, nombre, tipo, precio, stock, fechadecaducidad) VALUES (37, 'Azitromicina (Zithromax) 500 mg', 'COM', 14.90, 50, '2028-08-31');
+INSERT INTO medicinas (id, nombre, tipo, precio, stock, fechadecaducidad) VALUES (38, 'Cetirizina (Zyrtec) 10 mg', 'COM', 5.80, 130, '2028-09-30');
+INSERT INTO medicinas (id, nombre, tipo, precio, stock, fechadecaducidad) VALUES (39, 'Loratadina (Claritin) 10 mg', 'COM', 6.20, 120, '2028-04-30');
+INSERT INTO medicinas (id, nombre, tipo, precio, stock, fechadecaducidad) VALUES (40, 'Salbutamol (Ventolin) inhalador', 'COM', 12.50, 60, '2028-10-31');
+INSERT INTO medicinas (id, nombre, tipo, precio, stock, fechadecaducidad) VALUES (41, 'Metformina (Glucophage) 850 mg', 'COM', 10.80, 80, '2028-12-31');
+INSERT INTO medicinas (id, nombre, tipo, precio, stock, fechadecaducidad) VALUES (42, 'Amlodipina (Norvasc) 5 mg', 'COM', 9.60, 90, '2029-01-31');
+INSERT INTO medicinas (id, nombre, tipo, precio, stock, fechadecaducidad) VALUES (43, 'Atorvastatina (Lipitor) 20 mg', 'COM', 21.50, 70, '2028-11-30');
+INSERT INTO medicinas (id, nombre, tipo, precio, stock, fechadecaducidad) VALUES (44, 'Simvastatina (Zocor) 20 mg', 'COM', 18.90, 65, '2028-09-30');
+INSERT INTO medicinas (id, nombre, tipo, precio, stock, fechadecaducidad) VALUES (45, 'Losartán (Cozaar) 50 mg', 'COM', 12.40, 85, '2028-07-31');
+INSERT INTO medicinas (id, nombre, tipo, precio, stock, fechadecaducidad) VALUES (46, 'Enalapril (Renitec) 10 mg', 'COM', 11.20, 85, '2028-05-31');
+INSERT INTO medicinas (id, nombre, tipo, precio, stock, fechadecaducidad) VALUES (47, 'Furosemida (Lasix) 40 mg', 'COM', 8.90, 90, '2027-08-31');
+INSERT INTO medicinas (id, nombre, tipo, precio, stock, fechadecaducidad) VALUES (48, 'Pantoprazol 40 mg', 'GEN', 6.80, 110, '2028-03-31');
+INSERT INTO medicinas (id, nombre, tipo, precio, stock, fechadecaducidad) VALUES (49, 'Ranitidina 150 mg', 'GEN', 4.50, 100, '2027-06-30');
+INSERT INTO medicinas (id, nombre, tipo, precio, stock, fechadecaducidad) VALUES (50, 'Butilescopolamina 10 mg', 'GEN', 3.90, 140, '2028-08-31');
