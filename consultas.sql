@@ -95,3 +95,91 @@ WHERE precio BETWEEN 1 AND 2;
 
 SELECT * FROM clientes;
 SELECT * from medicinas;
+
+-- ******************************
+-- FECHA: 18-12-2025
+-- TEMA SUBCONSULTA
+-- ******************************
+-- REGISTRO DE DATOS Y CONSULTAS TABLA MEDICINAFRECUENTE
+
+SELECT * from medicinafrecuente;
+select count (*) from medicinafrecuente;
+
+-- CASO: Consultar los pacientes del plan de medicina frecuente en una lista que incluye: nombre y cedula del paciente, nombre e Id de la mediciona, Descuento
+use saludtotal;
+SELECT
+  cliente_cedula, -- esta es una consulta mono
+  (select nombre from clientes where cedula = cliente_cedula),
+  medicina_id,
+  (select nombre from medicinas where id = medicina_id),
+  descuento
+from medicinafrecuente;
+
+-- vamos a mejorar la presentación del reporte
+-- vamos a usar la etiqueta ALIAS la cual colocamos al final para asignar un nombre
+-- ALIAS facilita que el resultado sea amigable
+SELECT
+  cliente_cedula, -- esta es una consulta mono
+  (select nombre from clientes where cedula = cliente_cedula) as cliente,
+  medicina_id as id,
+  (select nombre from medicinas where id = medicina_id) as medicina,
+  descuento
+from medicinafrecuente;
+
+-- diseño de subconsulta ejercicio 6.3
+use saludtotal;
+SELECT
+  cliente_cedula, -- esta es una consulta mono
+  (select nombre from clientes where cedula = cliente_cedula) as cliente,
+  medicina_id as id,
+  (select nombre from medicinas where id = medicina_id) as medicina,
+  AND descuento > (select cliente_cedula from medicinafrecuente where descuento = 7.50)
+from medicinafrecuente;
+
+SELECT
+  cliente_cedula, -- esta es una consulta mono
+  (select nombre from clientes where cedula = cliente_cedula) as cliente,
+  medicina_id as id,
+  (select nombre from medicinas where id = medicina_id) as medicina,
+  descuento
+from medicinafrecuente
+where descuento < (
+  select descuento 
+  from medicinafrecuente
+  where cliente_cedula = '1720026663'
+);
+
+-- Caso: listado de pacientes del plan medicina frecuente
+-- presente el precio final de la medicina junto
+-- con el precio  sin descuento
+-- publicar en el foro
+
+SELECT * from medicinas;
+select precio
+from medicinas
+where id = 18;
+
+-- PRACTICA EN CLASE
+-- Caso: listado de pacientes del plan medicina frecuente
+-- presente el precio final de la medicina junto
+-- con el precio  sin descuento
+-- publicar en el foro
+USE saludtotal;
+select * from clientes;
+SELECT
+  cliente_cedula,
+  /* datos del cliente mediante subconsultas */
+  (SELECT nombre, email  FROM clientes WHERE cedula = cliente_cedula),
+  medicina_id,
+  /* datos de la medicina mediante subconsultas */
+  (SELECT nombre, tipo, precio  FROM medicinas WHERE id = mf.medicina_id),
+  descuento,
+  /* precio final calculado con subconsulta del precio */
+  ROUND(
+    (SELECT precio FROM medicinas WHERE id = medicina_id)
+    * (1 - mf.descuento / 100),
+    2
+  ) AS precio_final
+FROM medicinafrecuente;
+
+
