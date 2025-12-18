@@ -180,6 +180,37 @@ SELECT
     * (1 - mf.descuento / 100),
     2
   ) AS precio_final
-FROM medicinafrecuente;
+FROM medicinafrecuente
+ORDER;
 
+
+USE saludtotal;
+
+SELECT
+  c.cedula                          AS cliente_cedula,
+  c.nombre                          AS cliente_nombre,
+  c.email                           AS cliente_email,
+  mf.medicina_id,
+  m.nombre                          AS medicina_nombre,
+  m.tipo                            AS medicina_tipo,         -- GEN / COM
+  m.precio                          AS precio_sin_descuento,  -- precio base
+  mf.descuento                      AS descuento_porcentaje,  -- ej. 7.50
+  ROUND(m.precio * (1 - mf.descuento / 100), 2) AS precio_final,
+  mf.condicion,
+  mf.frecuencia
+FROM medicinafrecuente mf
+JOIN clientes  c ON c.cedula  = mf.cliente_cedula
+JOIN medicinas m ON m.id      = mf.medicina_id
+ORDER BY c.cedula;
+
+-- NUEVO EJERCICIO
+-- usando subconsultas
+-- CASO: las medicinas comerciales pueden ser reemplazadas
+-- por su correspondiente medicinas genéricas.
+-- Elaborar un listado que compare el precio de la medicina comercial
+-- con su equivalente genérico
+
+-- empezamos a trabajar en la tabla comercial-generica
+-- id_comercial
+-- id_generica
 

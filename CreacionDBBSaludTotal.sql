@@ -367,5 +367,35 @@ insert into clientes (cedula, nombre, fechadenacimiento) values ('182929004', 'J
 
 SELECT * from clientes;
 
--- FECHA: 17-12-2025
--- FUNDAMENTOS ED  CONSULTAS EN SQL
+-- FECHA: 18-12-2025
+-- CREACIÓN DE LA TABLA PENDIENTE medicinacomercialgenerica
+-- id_comercial
+-- id_generica
+
+
+USE saludtotal;
+
+create table medicinacomercialgenerica
+(
+    medicinacomercial_id int,
+    medicinagenerica_id int
+);
+
+alter table medicinacomercialgenerica
+add primary key (medicinacomercial_id, medicinagenerica_id);
+
+alter table medicinacomercialgenerica
+add constraint medicinacomercialgenerica_medicinacomercial_id_fk
+Foreign Key (medicinacomercial_id) 
+REFERENCES medicinas(id);
+
+alter table medicinacomercialgenerica
+add constraint medicinacomercialgenerica_medicinagenerica_id_fk
+Foreign Key (medicinagenerica_id) 
+REFERENCES medicinas(id);
+
+
+SELECT * from medicinacomercialgenerica;
+
+SELECT * from medicinas;
+
