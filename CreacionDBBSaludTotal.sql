@@ -394,8 +394,15 @@ add constraint medicinacomercialgenerica_medicinagenerica_id_fk
 Foreign Key (medicinagenerica_id) 
 REFERENCES medicinas(id);
 
+INSERT INTO medicinacomercialgenerica VALUES (1, 2);   -- Acetaminofen -> Paracetamol
+INSERT INTO medicinacomercialgenerica VALUES (3, 2);   -- Tylenol -> Paracetamol
+INSERT INTO medicinacomercialgenerica VALUES (5, 6);   -- Advil -> Ibuprofeno
+INSERT INTO medicinacomercialgenerica VALUES (7, 8);   -- Voltaren -> Diclofenaco
+INSERT INTO medicinacomercialgenerica VALUES (9, 10);  -- Bayer Aspirina -> Ácido Acetilsalicílico
+
 
 SELECT * from medicinacomercialgenerica;
 
 SELECT * from medicinas;
+
 
