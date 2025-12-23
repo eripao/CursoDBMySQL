@@ -329,6 +329,8 @@ join medicinas mgen on mgen.id = mcg.medicinagenerica_id;
 -- 3. select para los detalles de factura
 -- 4. select para el pie de factura
 
+-- PRESENTACIÓN DE TAREA DÍA VIERNES
+use saludtotal;
 SELECT
     e.razonsocial              AS empresa,
     e.ruc                      AS ruc_empresa,
@@ -347,7 +349,6 @@ SELECT
     m.tipo                     AS tipo_medicamento,
     fd.cantidad                AS cantidad,
     fd.precio                  AS precio_unitario,
-
     (fd.cantidad * fd.precio)  AS subtotal,
     f.total                    AS total_factura
 FROM factura f
@@ -360,3 +361,89 @@ JOIN medicinas m
 JOIN empresa e
     ON 1 = 1   -- la empresa es única
 WHERE f.facturanumero = '0000000001';
+
+-- ************************************
+-- FECHA 22-12-2025
+-- ************************************
+-- CORRECCIÓN DEL DEBER
+use saludtotal;
+drop column total; -- eliminamos la columna total de la tabla factura
+SELECT * from clientes;
+select * from factura;
+select count(*) from factura;
+select count(*) from facturadetalle;
+select * from factura;
+-- ******************
+-- ****************** 
+select
+  -- aquí hacemos la operación de proyecto en una consulta sql
+  fd.facturanumero,
+  fd.medicamento_id,
+  m.nombre,
+  fd.precio,
+  fd.cantidad,
+  fd.precio * fd.cantidad as subtotal
+from 
+  facturadetalle fd
+join medicinas m on m.id = fd.medicamento_id
+where 
+  facturanumero = '0000000002';
+
+-- pie de la factura
+select
+  sum(fd.precio * fd.cantidad) as subtotal
+from 
+  facturadetalle fd 
+  join medicina m -- falta completar
+where;
+
+-- **********************
+-- CREACIÓN DE UNA VISTA
+-- **********************
+CREATE VIEW vista_medicina_comercial_cliente_juridico AS
+SELECT
+    c.cedula,
+    c.nombre AS nombre_cliente,
+    m.nombre AS nombre_medicamento,
+    mf.descuento,
+    m.tipo  AS tipo_medicamento,
+    c.tipo  AS tipo_cliente
+FROM medicinafrecuente mf
+JOIN clientes c 
+    ON c.cedula = mf.cliente_cedula
+JOIN medicinas m 
+    ON m.id = mf.medicina_id
+WHERE 
+    m.tipo = 'COM'
+    AND c.tipo = 'JUR';
+use saludtotal;
+select * from clientes;
+
+select * from vista_medicina_comercial_cliente_juridico;
+
+-- LEFT JOIN
+-- Consultar las medicinas declaradas en el plan de mediciona frecuente
+
+use saludtotal;
+select count (*) from medicinas;
+select count (*) from medicinafrecuente;
+
+-- cuales son la médicinas que no estan en medicina frecuente
+select *
+from medicinas
+where id not in -- hacemos una subconsulta
+(
+  select medicina_id from medicinafrecuente
+);
+
+-- con un join
+-- left join
+
+select *
+from medicinas m
+left join medicinafrecuente mf on m.id = mf.medicina_id;
+
+select *
+from medicinafrecuente mf 
+left join medicinas m on m.id = mf.medicina_id;
+
