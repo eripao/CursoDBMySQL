@@ -447,3 +447,376 @@ select *
 from medicinafrecuente mf 
 left join medicinas m on m.id = mf.medicina_id;
 
+-- ********************
+-- FECHA: 23-12-2025
+-- ********************
+-- 13. Un ordenamiento sobre un atributo de forma descendente
+select *
+from clientes
+order by 
+  nombre; -- permite establecer criterios de ordenamiento
+
+-- cambiar el criterio por la fecha de nacimiento
+select *
+from clientes
+order by 
+  fechadenacimiento; -- permite realizar varias 
+                     -- comparaciones, podemos consultar quien es el cliente más joven
+
+select 
+  nombre,
+  fechadenacimiento
+from clientes
+order by 
+  fechadenacimiento desc -- permite realizar varias 
+LIMIT 1; -- mysql recupera el primer de la lista, así contestamos a la pregun
+-- quien es el cliente más joven
+
+-- caso: conocer las cinco medicinas más caras de la farmacia
+
+
+SELECT
+    id,
+    nombre,
+    tipo,
+    precio,
+    stock,
+    fechadecaducidad
+FROM medicinas
+ORDER BY precio DESC
+LIMIT 5;
+
+
+-- caso: conocer las cinco medicinas más baratas
+
+SELECT
+    id,
+    nombre,
+    tipo,
+    precio,
+    stock,
+    fechadecaducidad
+FROM medicinas
+ORDER BY precio ASC
+LIMIT 5;
+
+
+-- caso: la medicina comercial más barata
+
+SELECT
+    id,
+    nombre,
+    tipo,
+    precio,
+    stock,
+    fechadecaducidad
+FROM medicinas
+WHERE tipo = 'COM'
+LIMIT 1;
+
+
+-- caso: la medicina generica más cara
+
+SELECT
+    id,
+    nombre,
+    tipo,
+    precio,
+    stock,
+    fechadecaducidad
+FROM medicinas
+WHERE tipo = 'GEN'
+ORDER BY precio DESC -- parta desde la mayor
+LIMIT 1;
+-- por defecto orden acsendentemente
+
+-- caso: queremos saber las 5 medicinas COM con el menor descuento
+select
+  id,
+  nombre,
+  precio,
+  descuento
+from medicinafrecuente
+join medicinas on id = medicina_id
+where tipo = 'COM'
+AND descuento is not NULL
+ORDER BY
+  descuento
+LIMIT 5;
+
+select * from medicinas where nombre LIKE '%Voltare%';
+
+select * from medicinafrecuente where medicina_id = 30;
+use saludtotal;
+-- revisar no se ejecuta
+INSERT into medicinafrecuente values (
+ '1704165186', '30', 'Dolor frecuenterodillas','2xD',5.34
+);
+
+select * from medicinafrecuente;
+SELECT * from medicinas;
+-- revisar video 8:00 am
+select
+  id,
+  nombre,
+  precio,
+  descuento
+from medicinafrecuente
+join medicinas on id = medicina_id
+where tipo = 'COM'
+ORDER BY
+  descuento
+
+-- REVISAR INSTRCUCCIÓN MAL COMPLETADA
+-- medicina frecuente
+
+select DISTINCT
+  id,
+  nombre,
+  descuento
+from medicinafrecuente
+join medicinas on id = medicina_id
+WHERE
+  id in ( -- con este mecanismo evitanos
+    SELECT
+      id
+    from medicinafrecuente
+    JOIN medicinas on id = medicina_id
+    WHERE
+      tipo = 'COM'
+  )
+order by
+  descuento
+limit 5 -- cuando le incluimos dentro de una subconsulta lo podemos usar de la siguiente manera
+;
+-- revisar video 8:08 AM
+
+-- Un agrupamiento sobre un atributo que no posee una restricción de unicidad y una operación de conteo
+-- conteo basico sobre clientes
+-- permite agrupar los registros
+
+select 
+  tipo,
+  count (*) as numero
+from clientes
+group by 
+  tipo
+;
+-- función de agregación
+SELECT
+  id,
+  nombre,
+  precio,
+  stock,
+  precio * stock
+from medicinas;
+
+-- ambos suman el valor total
+-- con esta instrucción
+select
+  tipo,
+  sum(precio * stock)
+from medicinas
+group BY
+  tipo;
+
+-- caso: factura detalles. queremos saber el valor monetareo por medicina vendida
+-- consulta de medicinas vendidas
+select * from facturadetalle;
+
+-- vamos a ordenar medicamentos
+select 
+  medicamento_id,
+  cantidad,
+  precio,
+  cantidad * precio as suntotal
+from facturadetalle
+ORDER BY medicamento_id;
+
+-- VALOR TOTAL VENDIDO
+SELECT
+  fd.medicamento_id,
+  m.nombre,
+  sum(fd.cantidad * fd.precio)
+from facturadetalle fd
+join medicinas m on m.id = fd.medicamento_id
+group BY
+  medicamento_id
+  ORDER BY medicamento_id;
+
+-- **************************
+-- TAREA EN CLASE
+-- **************************
+-- Encontrar al mejor cliente
+
+SELECT 
+  cedula,
+  total
+FROM factura
+WHERE total = (SELECT MAX(total) FROM factura);
+
+-- correción
+select
+  fd.facturanumero,
+  f.cedula,
+  sum(fd.cantidad * fd.precio)
+from facturadetalle fd
+join factura f on f.facturanumero =fd.facturanumero
+join clientes c on c.cedula = f.cedula
+GROUP BY
+  fd.facturanumero
+ORDER BY
+  sum(fd.cantidad * fd.precio) DESC
+LIMIT 1;
+
+-- STOCK
+
+
+-- ***********
+-- FECHA 24_12_2025
+-- ***********
+-- revision de libro
+use saludtotal;
+
+select *
+FROM factura
+join facturadetalle;
+
+select count(*) from facturadetalle;
+
+-- *************************
+-- PRACTICA EN CLASE
+-- *************************
+-- Caso: proyección de la venta total del stock, 
+-- tomando en cuanta el descuento para las medicinas del plan de medicina frecuente
+
+select 
+  id,
+  nombre,
+  precio,
+  stock,
+  precio * stock
+from medicinas;
+-- acercamiento entre la tabla medicinafrecunte y medicinas
+-- APLICAMOS EL CONCEPTO DE UNION DE CONSULTAS
+use saludtotal;
+select 
+  mf.medicina_id,
+  m.nombre,
+  m.precio,
+  m.stock,
+  mf.descuento,
+  m.precio * (1-mf.descuento/100) as nuevo_precio -- formula para plicar descuento
+from medicinafrecuente mf
+join medicinas m on m.id = mf.medicina_id
+UNION -- uso del comando UNION
+select 
+  mf.medicina_id,
+  m.nombre,
+  m.precio,
+  m.stock,
+  0.0 as descuento,
+  m.precio as nuevo_precio
+from medicinafrecuente mf
+right join medicinas m on m.id = mf.medicina_id
+where mf.descuento is not NULL;
+
+-- ahora utilizando la misma consulta creamos una vista
+create view v_proyeccion_ventas
+as 
+select 
+  mf.medicina_id,
+  m.nombre,
+  m.precio,
+  m.stock,
+  mf.descuento,
+  m.precio * (1-mf.descuento/100) as nuevo_precio -- formula para plicar descuento
+from medicinafrecuente mf
+join medicinas m on m.id = mf.medicina_id
+UNION -- uso del comando UNION, las consultas deben tener los mismo datos para poder hacer la únion
+select 
+  mf.medicina_id,
+  m.nombre,
+  m.precio,
+  m.stock,
+  0.0 as descuento, -- sin descuento, es descuento cero
+  m.precio as nuevo_precio
+from medicinafrecuente mf
+right join medicinas m on m.id = mf.medicina_id
+where mf.descuento is NULL;
+
+-- vamos hacer uso de la vista
+-- suma de venta por stock
+
+select 
+  sum(nuevo_precio * stock) -- sumamos y vemos la proyecto del stock, tomando en cuenta el valor del descuento
+from 
+  v_proyeccion_ventas;
+
+-- CASO: averiguar que medicinas vencen en el próximo mes
+-- propuesta 
+use saludtotal;
+SELECT nombre, tipo, stock, fechadecaducidad
+FROM medicinas
+WHERE fechadecaducidad 
+BETWEEN CURDATE() 
+AND DATE_ADD(CURDATE(), INTERVAL 3 MONTH);
+
+-- primer opción compañer erick
+select 
+  id,
+  nombre,
+  fechadecaducidad
+FROM
+  medicinas
+WHERE 
+  fechadecaducidad >= date_add(last_day(curdate()), interval 1 day)
+  and fechadecaducidad <= last_day(date_add(curdate(),INTERVAL 1 MONTH))
+ORDER BY
+  fechadecaducidad;
+
+select id, fechadecaducidad from medicinas;
+
+-- **************
+-- CASO: Cronograma de vencimientos de medicinas a tres meses vista
+-- podemos usar unión, crear una vista
+
+CREATE VIEW cronograma_vencimientos_3_meses AS
+SELECT 
+  id,
+  nombre,
+  fechadecaducidad,
+  'Mes 1' AS periodo
+FROM medicinas
+WHERE fechadecaducidad 
+BETWEEN 
+  DATE_ADD(LAST_DAY(CURDATE()), INTERVAL 1 DAY)
+  AND LAST_DAY(DATE_ADD(CURDATE(), INTERVAL 1 MONTH))
+
+UNION
+
+SELECT 
+  id,
+  nombre,
+  fechadecaducidad,
+  'Mes 2' AS periodo
+FROM medicinas
+WHERE fechadecaducidad 
+BETWEEN 
+  DATE_ADD(LAST_DAY(DATE_ADD(CURDATE(), INTERVAL 1 MONTH)), INTERVAL 1 DAY)
+  AND LAST_DAY(DATE_ADD(CURDATE(), INTERVAL 2 MONTH))
+
+UNION
+
+SELECT 
+  id,
+  nombre,
+  fechadecaducidad,
+  'Mes 3' AS periodo
+FROM medicinas
+WHERE fechadecaducidad 
+BETWEEN 
+  DATE_ADD(LAST_DAY(DATE_ADD(CURDATE(), INTERVAL 2 MONTH)), INTERVAL 1 DAY)
+  AND LAST_DAY(DATE_ADD(CURDATE(), INTERVAL 3 MONTH));
+
+select * from cronograma_vencimientos_3_meses;
