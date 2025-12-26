@@ -405,4 +405,8 @@ SELECT * from medicinacomercialgenerica;
 
 SELECT * from medicinas;
 
+-- ******************
+-- FECHA: 26-12-2025
+-- KARDEX
+-- ******************
 

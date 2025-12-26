@@ -780,7 +780,6 @@ select id, fechadecaducidad from medicinas;
 -- **************
 -- CASO: Cronograma de vencimientos de medicinas a tres meses vista
 -- podemos usar unión, crear una vista
-
 CREATE VIEW cronograma_vencimientos_3_meses AS
 SELECT 
   id,
@@ -792,9 +791,7 @@ WHERE fechadecaducidad
 BETWEEN 
   DATE_ADD(LAST_DAY(CURDATE()), INTERVAL 1 DAY)
   AND LAST_DAY(DATE_ADD(CURDATE(), INTERVAL 1 MONTH))
-
 UNION
-
 SELECT 
   id,
   nombre,
@@ -820,3 +817,186 @@ BETWEEN
   AND LAST_DAY(DATE_ADD(CURDATE(), INTERVAL 3 MONTH));
 
 select * from cronograma_vencimientos_3_meses;
+
+-- *********************************
+-- FECHA: 26-12-2025
+-- *********************************
+-- Caso: Kardex de la farmacia
+-- De una medicina, quiero los movimientos de entrada y salida
+--          De una medicina vamos hacer el siguiente análisis
+--          -- Stock inicial por período
+--          -- Compras, Alta por inventario, Donaciones, etc.
+--          -- Ventas, bajas por inventario, vencimientos, etc.
+--        Resultado: stock final.
+--        Método para valorar el Kardex: PROMEDIO, FIFO Y LIFO
+
+use saludtotal;
+drop VIEW v_mov_ventas;
+create VIEW v_mov_ventas
+as
+SELECT
+  f.fecha,
+  fd.medicamento_id,
+  m.nombre as medicina,
+  fd.facturanumero as documento,
+  'Venta' as tipo_mov,
+  sum(fd.cantidad)
+    over (PARTITION BY fd.medicamento_id ORDER BY f.fecha) as acumulado,
+  m.stock,
+  fd.cantidad
+from facturadetalle fd
+join factura f on f.facturanumero = fd.facturanumero
+join medicinas m on m.id = fd.medicamento_id
+where  
+  fd.medicamento_id = 3
+order by 
+  f.fecha;
+
+--
+select
+  fecha,
+  documento,
+  tipo_mov,
+  stock,
+  cantidad,
+  acumulado,
+  stock - acumulado as saldo
+from v_mov_ventas
+WHERE
+ medicamento_id = 3;
+
+-- diseño en la base de datos para incorporar las 
+-- compras realizadas a los proveedores
+-- proveedor
+    -- ruc, nombre, telefono, email
+-- orden de compra
+    -- numero compra, fecha, proveedor_ruc
+-- orden de compra detalle
+    -- ordennumero, medicamente_id, cantidad, costo
+
+create table ordencompra_detalle (
+  ordennumero int,
+  medicamento_id int,
+  cantidad decimal(15,2),
+  costo decimal(15,2)
+);
+
+alter table ordencompra_detalle
+add constraint ordencompra_detalle_ordenumero_fk
+Foreign Key (ordennumero)
+REFERENCES ordencompra(numero);
+
+alter table ordencompra_detalle
+add constraint ordencompra_detalle_medicamento_id_fk
+Foreign Key (medicamento_id)
+references medicinas(id);
+
+create table proveedor (
+  ruc char(13) primary key,
+  nombre char(200) unique not null,
+  telefono VARCHAR (20),
+  email VARCHAR(100) unique
+);
+
+ALTER TABLE ordencompra
+ADD CONSTRAINT orden_compra_proveedor_fk
+FOREIGN KEY (proveedor_ruc)
+REFERENCES proveedor (ruc);
+
+create table ordencompra(
+  numero int primary key,
+  proveedor_ruc char(13),
+  fecha DATE
+);
+
+alter table ordencompra_detalle
+add constraint ordencompra_detalle_ordennumero_fk
+Foreign Key (ordennumero)
+REFERENCES ordencompra(numero);
+
+alter table ordencompra_detalle
+add constraint ordencompra_detalle_medicamento_id_fk
+Foreign Key (medicamento_id)
+REFERENCES medicinas(id);
+
+-- *****************
+-- Registro de datos
+-- *****************
+
+INSERT INTO proveedor VALUES 
+('1799999999001','Bayer Ecuador','0998123456','contacto@bayer.com'),
+('1799999999002','HealthCom','0987654321','ventas@healthcom.com'),
+('1799999999003','Farmacorp','0977112233','info@farmacorp.com');
+
+INSERT INTO ordencompra VALUES
+('1','1799999999001','2025-12-20'),
+('2','1799999999002','2025-12-21'),
+('3','1799999999003','2025-12-22');
+
+INSERT INTO ordencompra_detalle VALUES
+('1',1,100,0.45),
+('1',2,200,0.20),
+('1',3,150,0.60);
+
+-- Orden 2
+INSERT INTO ordencompra_detalle VALUES
+('2',4,120,0.85),
+('2',6,300,0.30);
+
+-- Orden 3
+INSERT INTO ordencompra_detalle VALUES
+('3',8,250,0.40),
+('3',10,400,0.25);
+
+SELECT * FROM proveedor;
+
+select * from ordencompra;
+
+SELECT * from ordencompra_detalle ORDER BY medicamento_id
+
+-- KAREX
+-- creamos un vista para ver los movimientos de las compras a proveedores
+
+create VIEW v_mov_compra
+as
+SELECT
+  ocd.medicamento_id,
+  m.nombre as medicina,
+  oc.numero as documento,
+  'Compra' as tipo_mov,
+  m.stock,
+  ocd.cantidad
+from ordencompra_detalle ocd
+join ordencompra oc on oc.numero = ocd.ordennumero
+join medicinas m on m.id = ocd.medicamento_id
+order by 
+  oc.fecha;
+
+-- 
+SELECT 
+  * 
+from v_mov_compra;
+UNION
+SELECT 
+  * 
+from v_mov_compra
+WHERE
+  medicamento_id = 36;
+--
+
+select 
+  stock,
+  cantidad,
+  tipo_mov,
+  sum(
+    case tipo_mov
+    when 'Venta' then - cantidad
+    when 'Compra' then cantidad
+    END 
+  ) over (PARTITION BY medicamento_id ORDER BY fecha) as saldo 
+  FROM
+    v_movimientos
+  where medicamento_id=36;
+
+  -- lo que hemos tratado en esta clase es la función de agregación
+  
